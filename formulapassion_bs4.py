@@ -40,10 +40,10 @@ def sendTelegraph( articleImage, articleTitle, articleDescription, articleUrl,ar
 	articleContent = articleContent.replace("\n\n\n","\n")
 	IMAGEHTML = "<a href=\"" + articleImage + "\"><img src=\"" + articleImage + "\"></img></a>"
 	LINK = "<a href=\"" + articleUrl + "\">LINK</a>\n"
-	html_content = IMAGEHTML + "<b>" + articleTitle + "</b>\n" + LINK + articleContent.replace("<strong>","<b>").replace("</strong>","</b>").replace("<p>","").replace("</p>","")
+	html_content = IMAGEHTML.encode("utf-8") + "<b>" + articleTitle.encode("utf-8") + "</b>\n" + LINK.encode("utf-8") + articleContent.replace("<strong>","<b>").replace("</strong>","</b>").encode("utf-8")
 	#print html_content
 	try:
-		page = telegraph.createPage( articleTitle, html_content= html_content, author_name="f126ck" )
+		page = telegraph.createPage( articleTitle, html_content= html_content.encode("utf-8"), author_name="f126ck" )
 		url2send = 'http://telegra.ph/{}'.format(page['path'].encode("utf-8"))
 		bot.sendMessage(parse_mode = "Html", text = "<b>" + articleTitle.replace("| FormulaPassion.it","") + "</b>" + "\n" + url2send ,chat_id=MY_CHAT_ID_TELEGRAM)
 	except InvalidHTML:
@@ -81,7 +81,7 @@ def checkFeed():
 def main():
 	print "starting app"
 	populateAllUrl()
-	schedule.every(10).minutes.do( checkFeed )
+	schedule.every(5).minutes.do( checkFeed )
 	while True:
 		schedule.run_pending()
 		#print "sleeping.."
