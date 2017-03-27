@@ -57,7 +57,7 @@ def checkFeed():
 		url = entries[ i ].link
 		if url not in allUrl:
 			html = urllib.urlopen( url ).read()
-			bsObj = BeautifulSoup( html, "lxml" )
+			bsObj = BeautifulSoup( html, "html.parser" )
 			articleImage = bsObj.findAll("meta",{"property":"og:image"})[0].attrs["content"]
 			articleTitle = bsObj.findAll("meta",{"property":"og:title"})[0].attrs["content"].encode('utf-8')
 			articleDescription = bsObj.findAll("meta",{"property":"og:description"})[0].attrs["content"]
@@ -81,7 +81,7 @@ def checkFeed():
 def main():
 	print "starting app"
 	populateAllUrl()
-	schedule.every(20).minutes.do( checkFeed )
+	schedule.every(10).minutes.do( checkFeed )
 	while True:
 		schedule.run_pending()
 		#print "sleeping.."
