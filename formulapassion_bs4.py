@@ -81,7 +81,7 @@ def checkFeed():
 def main():
 	print "starting app"
 	populateAllUrl()
-	schedule.every(29).minutes.do( checkFeed )
+	schedule.every(1).minutes.do( checkFeed )
 	while True:
 		schedule.run_pending()
 		print "sleeping.."
