@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
-import urllib
+from urllib.request import urlopen #http://stackoverflow.com/questions/2792650/python3-error-import-error-no-module-name-urllib2#2792652
 import feedparser
 from telegraphapi import Telegraph
 from telegraphapi.exceptions import InvalidHTML
@@ -28,23 +28,19 @@ def populateAllUrl():
 		print i,rows[i]'''
 
 def printWarning(string):
-	print(Back.YELLOW + Fore.BLUE + string + Style.RESET_ALL)
+	pass
+	#print(Back.YELLOW + Fore.BLUE + string + Style.RESET_ALL)
 
 def sendTelegraph( articleImage, articleTitle, articleDescription, articleUrl,articleContent ):
 	global MY_CHAT_ID_TELEGRAM
 	articleImage = articleImage
 	articleTitle = articleTitle.replace("| FormulaPassion.it","")
-	articleDescription = articleDescription.encode("utf-8")
+	articleDescription = articleDescription
 	articleUrlmod = articleUrl.split("/")[-2]
 	articleContent = articleContent.replace("\n\n","\n")
 	articleContent = articleContent.replace("\n\n\n","\n")
 	IMAGEHTML = "<a href=\"" + articleImage + "\"><img src=\"" + articleImage + "\"></img></a>"
-	
-	print articleImage
-	print articleTitle
-	print articleDescription
-	print articleUrl
-	
+
 	LINK = "<a href=\"" + articleUrl + "\">LINK</a>\n"
 	html_content = IMAGEHTML + "<b>" + articleTitle + "</b>\n" + "  " + LINK + articleContent.replace("<strong>","<b>").replace("</strong>","</b>")
 	#print html_content
@@ -54,7 +50,7 @@ def sendTelegraph( articleImage, articleTitle, articleDescription, articleUrl,ar
 		bot.sendMessage(parse_mode = "Html", text = "<b>" + articleTitle.replace("| FormulaPassion.it","") + "</b>" + "\n" + url2send ,chat_id=MY_CHAT_ID_TELEGRAM)
 	except InvalidHTML:
 		bot.sendMessage(disable_web_page_preview = True, parse_mode = "Html", text = "<b>Si è verificato un errore nell'elaborare la seguente pagina:</b>\n" + articleUrl ,chat_id=MY_CHAT_ID_TELEGRAM)
-		printWarning("[!]" + articleUrl )
+		#printWarning("[!]" + articleUrl )
 
 def checkFeed():
 	global allUrl
@@ -62,7 +58,7 @@ def checkFeed():
 	for i in reversed(range(len(entries))):
 		url = entries[ i ].link
 		if url not in allUrl:
-			html = urllib.urlopen( url ).read()
+			html = urlopen( url ).read()
 			bsObj = BeautifulSoup( html, "html.parser" )
 			articleImage = bsObj.findAll("meta",{"property":"og:image"})[0].attrs["content"]
 			articleTitle = bsObj.findAll("meta",{"property":"og:title"})[0].attrs["content"]#.decode('utf-8')
@@ -85,7 +81,7 @@ def checkFeed():
 			f.close()
 	
 def main():
-	print "starting app"
+	#print "starting app"
 	populateAllUrl()
 	schedule.every(5).minutes.do( checkFeed )
 	while True:
