@@ -43,6 +43,7 @@ def sendTelegraph( articleImage, articleTitle, articleDescription, articleUrl,ar
 
 	LINK = "<a href=\"" + articleUrl + "\">LINK</a>\n"
 	html_content = IMAGEHTML + "<b>" + articleTitle + "</b>\n" + "  " + LINK + articleContent.replace("<strong>","<b>").replace("</strong>","</b>")
+	html_content = html_content.replace("<p>","").replace("</p>","")
 	#print html_content
 	try:
 		page = telegraph.createPage( articleTitle, html_content= html_content, author_name="f126ck" )
