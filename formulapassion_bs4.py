@@ -84,7 +84,7 @@ def main():
 	schedule.every(5).minutes.do( checkFeed )
 	while True:
 		schedule.run_pending()
-		print "sleeping.."
-		time.sleep(5)
+		#print "sleeping.."
+		time.sleep(60)
 
 main()
