@@ -40,7 +40,7 @@ def sendTelegraph( articleImage, articleTitle, articleDescription, articleUrl,ar
 	articleContent = articleContent.replace("\n\n\n","\n")
 	IMAGEHTML = "<a href=\"" + articleImage + "\"><img src=\"" + articleImage + "\"></img></a>"
 	LINK = "<a href=\"" + articleUrl + "\">LINK</a>\n"
-	html_content = IMAGEHTML.encode("utf-8") + "<b>" + articleTitle.encode("utf-8") + "</b>\n" + LINK.encode("utf-8") + articleContent.replace("<strong>","<b>").replace("</strong>","</b>").encode("utf-8")
+	html_content = IMAGEHTML + "<b>" + articleTitle + "</b>\n" + "  " + LINK + articleContent.replace("<strong>","<b>").replace("</strong>","</b>")
 	#print html_content
 	try:
 		page = telegraph.createPage( articleTitle, html_content= html_content.encode("utf-8"), author_name="f126ck" )
@@ -59,7 +59,7 @@ def checkFeed():
 			html = urllib.urlopen( url ).read()
 			bsObj = BeautifulSoup( html, "html.parser" )
 			articleImage = bsObj.findAll("meta",{"property":"og:image"})[0].attrs["content"]
-			articleTitle = bsObj.findAll("meta",{"property":"og:title"})[0].attrs["content"].encode('utf-8')
+			articleTitle = bsObj.findAll("meta",{"property":"og:title"})[0].attrs["content"]#.decode('utf-8')
 			articleDescription = bsObj.findAll("meta",{"property":"og:description"})[0].attrs["content"]
 			articleUrl = bsObj.findAll("meta",{"property":"og:url"})[0].attrs["content"]
 			#print articleUrl
@@ -84,7 +84,7 @@ def main():
 	schedule.every(5).minutes.do( checkFeed )
 	while True:
 		schedule.run_pending()
-		#print "sleeping.."
+		print "sleeping.."
 		time.sleep(5)
 
 main()
