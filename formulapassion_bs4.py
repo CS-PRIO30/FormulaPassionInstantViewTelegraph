@@ -45,9 +45,9 @@ def sendTelegraph( articleImage, articleTitle, articleDescription, articleUrl,ar
 	html_content = IMAGEHTML + "<b>" + articleTitle + "</b>\n" + "  " + LINK + articleContent.replace("<strong>","<b>").replace("</strong>","</b>")
 	#print html_content
 	try:
-		page = telegraph.createPage( articleTitle, html_content= html_content.encode("utf-8"), author_name="f126ck" )
-		url2send = 'http://telegra.ph/{}'.format(page['path'].encode("utf-8"))
-		bot.sendMessage(parse_mode = "Html", text = "<b>" + articleTitle.replace("| FormulaPassion.it","") + "</b>" + "\n" + url2send ,chat_id=MY_CHAT_ID_TELEGRAM)
+		page = telegraph.createPage( articleTitle, html_content= html_content, author_name="f126ck" )
+		url2send = 'http://telegra.ph/' + page['path']		
+                bot.sendMessage(parse_mode = "Html", text = "<b>" + articleTitle.replace("| FormulaPassion.it","") + "</b>" + "\n" + url2send ,chat_id=MY_CHAT_ID_TELEGRAM)
 	except InvalidHTML:
 		bot.sendMessage(disable_web_page_preview = True, parse_mode = "Html", text = "<b>Si è verificato un errore nell'elaborare la seguente pagina:</b>\n" + articleUrl ,chat_id=MY_CHAT_ID_TELEGRAM)
 		#printWarning("[!]" + articleUrl )
